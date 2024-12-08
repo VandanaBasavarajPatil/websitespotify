@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div>
+        <h2>Search Songs</h2>
+        <form action="/search" method="GET">
+            <input type="text" name="query" value="{{ query }}" placeholder="Search by song name or artist">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if query %}
+            {% if content %}
+                <h3>Search Results:</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Song ID</th>
+                            <th>Song Name</th>
+                            <th>Artist</th>
+                            <th>Streamed Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for song in content %}
+                            <tr>
+                                <td>{{ song.song_id }}</td>
+                                <td>{{ song.song_name }}</td>
+                                <td>{{ song.artist }}</td>
+                                <td>{{ song.streamed_hours }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No results found for "{{ query }}".</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <!-- Card Layout for Charts -->
+    <div style="display: flex; justify-content: space-between; margin-top: 40px; gap: 20px; flex-wrap: wrap;">
+        <div class="chart-card">
+            <h3>Streamed Hours by Song Name</h3>
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <h3>Streamed Hours by Artist</h3>
+            <canvas id="donutChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Table below charts -->
+    <div style="margin-top: 40px;">
+        <h3>Top Songs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Song ID</th>
+                    <th>Song Name</th>
+                    <th>Artist</th>
+                    <th>Streamed Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in content %}
+                    <tr>
+                        <td>{{ song.song_id }}</td>
+                        <td>{{ song.song_name }}</td>
+                        <td>{{ song.artist }}</td>
+                        <td>{{ song.streamed_hours }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Extract data for the charts
+        const songNames = {{ content | map(attribute='song_name') | list | safe }};
+        const streamedHours = {{ content | map(attribute='streamed_hours') | list | safe }};
+        const artists = {{ content | map(attribute='artist') | list | safe }};
+
+        // Aggregate streamed hours by artist
+        const artistStreamedHours = {};
+        artists.forEach((artist, index) => {
+            if (!artistStreamedHours[artist]) {
+                artistStreamedHours[artist] = 0;
+            }
+            artistStreamedHours[artist] += streamedHours[index];
+        });
+
+        // Data for the donut chart
+        const artistLabels = Object.keys(artistStreamedHours);
+        const artistData = Object.values(artistStreamedHours);
+
+        // Bar Chart: Song Names vs. Streamed Hours
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: songNames,
+                datasets: [{
+                    label: 'Streamed Hours',
+                    data: streamedHours,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Donut Chart: Streamed Hours by Artist
+        const donutCtx = document.getElementById('donutChart').getContext('2d');
+        const donutChart = new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: artistLabels,
+                datasets: [{
+                    data: artistData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + ' hours';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181818;
+            color: #fff;
+        }
+
+        h2, h3 {
+            color: #4CAF50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: #4CAF50;
+        }
+
+        tr {
+            background-color: #292929;
+        }
+
+        tr:nth-child(even) {
+            background-color: #3d3d3d;
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 14px;
+            color: #fff;
+            background-color: #333;
+            border: 1px solid #4CAF50;
+            border-radius: 4px;
+        }
+
+        input:focus, button:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Chart card styles */
+        .chart-card {
+            flex: 1;
+            max-width: 40%; /* Reduced to 40% width */
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px; /* Adjusted for smaller size */
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+{% endblock %}

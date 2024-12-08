@@ -1,0 +1,95 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #1DB954;
+    padding: 1rem;
+    text-align: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* Playlist Section */
+.playlist {
+    padding: 20px;
+}
+
+.playlist h2 {
+    font-size: 1.5rem;
+    color: #1DB954;
+}
+
+.playlist ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.playlist li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.song-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-name {
+    font-weight: bold;
+}
+
+.artist-name {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.playlist .play-btn {
+    background-color: #1DB954;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.playlist .play-btn:hover {
+    background-color: #14833b;
+}
+
+/* Audio Player Section */
+.audio-player {
+    text-align: center;
+    padding: 20px;
+    background-color: #222;
+    border-top: 1px solid #333;
+}
+
+audio,
+iframe {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #121212;
+    color: #aaa;
+    border-top: 1px solid #333;
+}
