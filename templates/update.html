@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<h1>Update Song</h1>
+<form method="POST" enctype="application/x-www-form-urlencoded">
+    <label for="song_id">Song ID:</label>
+    <input type="text" id="song_id" name="song_id" value="{{ song.song_id }}" required><br><br>
+
+    <label for="song_name">Song Name:</label>
+    <input type="text" id="song_name" name="song_name" value="{{ song.song_name }}" required><br><br>
+
+    <label for="artist">Artist:</label>
+    <input type="text" id="artist" name="artist" value="{{ song.artist }}" required><br><br>
+
+    <label for="streamed_hours">Streamed Hours:</label>
+    <input type="text" id="streamed_hours" name="streamed_hours" value="{{ song.streamed_hours }}" required><br><br>
+
+    <input type="submit" value="Update"><a href="/">Back to Songs List</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+     <main>
+        <section class="playlist">
+            <h2>PlayList</h2>
+            <div class="playlist-container">
+                <!-- Example of a song card -->
+                <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/5XeFesFbtLpXzIVDNQP22n', 'Wanna Be Yours', 'Arctic Monkeys', 'http://www.lovethispic.com/uploaded_images/126452-I-Wanna-Be-Yours.jpg')">
+                    <img src="http://www.lovethispic.com/uploaded_images/126452-I-Wanna-Be-Yours.jpg" alt="Song 1 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Wanna Be Yours</span>
+                        <span class="artist-name">Arctic Monkeys</span>
+                    </div>
+                </div>
+
+                <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/35OoRmRvzNS6DjAtEgpiMd?utm_source=generator', 'Yaahon Yaahon', 'Mika Singh', 'https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/08/e1/c3/08e1c327-24c5-ee9f-ad38-189db14f371f/cover.jpg/1200x1200bf-60.jpg')">
+                    <img src="https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/08/e1/c3/08e1c327-24c5-ee9f-ad38-189db14f371f/cover.jpg/1200x1200bf-60.jpg" alt="Song 2 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Yaahon Yaahon</span>
+                        <span class="artist-name">Mika Singh</span>
+                    </div>
+                </div>
+
+                <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/2CUjTlHyP0wrsg7TiEpULn?utm_source=generator', 'Naatu Naatu', 'M.M.Keeravani', 'https://is2-ssl.mzstatic.com/image/thumb/Music116/v4/13/40/6b/13406bb2-42fe-0966-5cd1-38b879f06949/8903431853592_cover.jpg/1200x1200bf-60.jpg')">
+                    <img src="https://is2-ssl.mzstatic.com/image/thumb/Music116/v4/13/40/6b/13406bb2-42fe-0966-5cd1-38b879f06949/8903431853592_cover.jpg/1200x1200bf-60.jpg" alt="Song 3 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Naatu Naatu</span>
+                        <span class="artist-name">M.M.Keeravani</span>
+                    </div>
+                </div>
+
+                 <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/2LcXJP95e4HKydTZ2mYfrx?utm_source=generator', 'Thuj Mein Rab Dikhta Hai', 'salim-sulaiman', 'https://i.scdn.co/image/ab67616d0000b2731555fec10000486f9331fbc8')">
+                    <img src="https://i.scdn.co/image/ab67616d0000b2731555fec10000486f9331fbc8" alt="Song 3 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Thuj Mein Rab Dikhta Hai</span>
+                        <span class="artist-name">Salim-sulaiman</span>
+                    </div>
+                </div>
+
+                 <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/538V6gFAnhcLZrg6I8lIMI?utm_source=generator', 'Hungry Cheetha', 'Thaman S', 'https://www.naasongs.to/wp-content/uploads/2023/09/OG-2023-Hungry-Cheetah-Telugu.jpg')">
+                    <img src="https://www.naasongs.to/wp-content/uploads/2023/09/OG-2023-Hungry-Cheetah-Telugu.jpg" alt="Song 3 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Hungry Cheetha</span>
+                        <span class="artist-name">Thaman S </span>
+                    </div>
+                </div>
+
+                <div class="song-card" onclick="playSpotify('https://open.spotify.com/embed/track/3oM90C4SZLYzVZJEZD5EQk?utm_source=generator', 'Khairiyat', 'Arijit Singh', 'https://i0.wp.com/fillumdekho.com/wp-content/uploads/2019/09/Khairiyat-poster.jpg?w=1000')">
+                    <img src="https://i0.wp.com/fillumdekho.com/wp-content/uploads/2019/09/Khairiyat-poster.jpg?w=1000" alt="Song 4 Cover" class="song-image">
+                    <div class="song-info">
+                        <span class="song-name">Khairiyat</span>
+                        <span class="artist-name">Arijit Singh</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="audio-player">
+            <h3 id="current-song">Now Playing: </h3>
+            <img id="current-song-image" src="" alt="Song Cover" class="current-song-image">
+
+            <!-- Spotify Embed -->
+            <iframe id="spotify-embed" src="" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="display: none;"></iframe>
+
+            <!-- Audio Player (For local or direct mp3 links) -->
+            <audio id="audio-player" controls style="display: none;">
+                <source id="audio-source" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Spotify-Like Audio Player</p>
+    </footer>
+
+    <script>
+        // Function to play a Spotify song via embed
+        function playSpotify(embedUrl, songName, artistName, imagePath) {
+            const spotifyEmbed = document.getElementById("spotify-embed");
+            const audioPlayer = document.getElementById("audio-player");
+            const currentSong = document.getElementById("current-song");
+            const currentSongImage = document.getElementById("current-song-image");
+
+            // Update Spotify embed, metadata, and hide the audio player
+            spotifyEmbed.src = embedUrl;
+            spotifyEmbed.style.display = "block";
+            audioPlayer.style.display = "none";
+            currentSong.innerText = `Now Playing: ${songName} by ${artistName}`;
+            currentSongImage.src = imagePath;
+        }
+
+        // Function to play an MP3 file
+        function playSong(filePath, songName, artistName, imagePath) {
+            const spotifyEmbed = document.getElementById("spotify-embed");
+            const audioSource = document.getElementById("audio-source");
+            const audioPlayer = document.getElementById("audio-player");
+            const currentSong = document.getElementById("current-song");
+            const currentSongImage = document.getElementById("current-song-image");
+
+            // Update the audio source, metadata, and hide Spotify embed
+            audioSource.src = filePath;
+            audioPlayer.load();
+            audioPlayer.play();
+            spotifyEmbed.style.display = "none";
+            audioPlayer.style.display = "block";
+            currentSong.innerText = `Now Playing: ${songName} by ${artistName}`;
+            currentSongImage.src = imagePath;
+        }
+    </script>
+</body>
+</html>
+
+<style>
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+      \background-color: #1DB954;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+/* Playlist Section */
+.playlist {
+    padding: 20px;
+    text-align: center;
+}
+
+.playlist h2 {
+    font-size: 1.5rem;
+    color: #1DB954;
+}
+
+.playlist-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjusts spacing between cards */
+    gap: 20px; /* Space between the cards */
+    margin-top: 20px;
+    padding: 0 10px; /* Optional: Add some padding for better edge spacing */
+}
+
+.song-card {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 15px;
+    width: calc(33.33% - 20px); /* Ensures three cards fit in a row, accounting for gaps */
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Prevents overflow */
+}
+
+.song-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.song-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.song-info {
+    text-align: center;
+}
+
+.song-name {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.artist-name {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+/* Audio Player Section */
+.audio-player {
+    text-align: center;
+    padding: 20px;
+    background-color: #222;
+    border-top: 1px solid #333;
+}
+
+audio, iframe {
+    width: 100%;
+    max-width: 500px;
+    margin-top: 10px;
+}
+
+.current-song-image {
+    width: 200px;
+    margin: 20px auto;
+    border-radius: 10px;
+    display: block;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #121212;
+    color: #aaa;
+    border-top: 1px solid #333;
+}
+
+</style>
+{% endblock %}
